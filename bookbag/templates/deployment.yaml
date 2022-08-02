@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bookbag.name" . }}
+  labels:
+    {{- include "bookbag.labels" . | nindent 4 }}
+    app.openshift.io/runtime: quarkus
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "bookbag.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "bookbag.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "bookbag.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          env:
+            - name: APPLICATION_NAME
+              value: {{ include "bookbag.name" . }}
+            - name: AUTH_USERNAME
+              value: '*'           
+            - name: CLUSTER_SUBDOMAIN
+            - name: OAUTH_SERVICE_ACCOUNT
+              value: {{ include "bookbag.serviceAccountName" . }}
+            - name: DOWNLOAD_URL
+            - name: WORKSHOP_FILE
+            - name: OC_VERSION
+            - name: ODO_VERSION
+            - name: KUBECTL_VERSION
+            - name: WORKSHOP_VARS
+              value: >-
+                {{ .Values.bookbagVariables }}
+          ports:
+            - name: http
+              containerPort: 10080
+              protocol: TCP
+
