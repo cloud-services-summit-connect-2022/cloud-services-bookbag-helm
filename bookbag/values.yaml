@@ -4,7 +4,7 @@
 
 replicaCount: 1
 
-image: quay.io/globex-recommendation/summit-connect-bookbag:summit-connect
+image: quay.io/globex-recommendation/summit-connect-bookbag:rhte-2023
 imagePullPolicy: IfNotPresent
 
 nameOverride: ""
